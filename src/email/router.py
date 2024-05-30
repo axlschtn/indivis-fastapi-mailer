@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 
 email_router = APIRouter(
     prefix='/email',
@@ -7,7 +7,7 @@ email_router = APIRouter(
 
 @email_router.post('/parse')
 async def parse_email(
-    email_content: str
+    req: Request
 ):
-    print(email_content)
+    print(req.body)
     return 'ok'
