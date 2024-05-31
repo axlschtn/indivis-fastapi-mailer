@@ -3,31 +3,37 @@ from fastapi import APIRouter, Request, File
 import base64
 from bs4 import BeautifulSoup
 import re
+import json
 
 email_router = APIRouter(
     prefix='/email',
     tags=['Email']
 )
 
+regex_email = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
+
 @email_router.post('/parse')
 async def parse_email(
-    file: Annotated[bytes, File()],
-    req: Request
+    req: Request,
+    file: Annotated[bytes, File()] = None,
 ):
+    
     file_decode = file.decode("utf-8").encode('utf-8')
     file_str = base64.b64decode(file_decode).decode("utf-8")
     soup = BeautifulSoup(file_str, "html.parser") 
-    print(soup)
     title_tag =  soup.find("title").text
     bienici_pattern_title = r'II3-\d{4}'
     bienici_matcher = re.findall(bienici_pattern_title, title_tag)
     if bienici_matcher:
-        all_divs = soup.find_all("div")
-        print(all_divs)
-        for div in all_divs:
-            print(div)
-        user_info_block = soup.find("div", attrs={"style":"font-size:18px;line-height:22px;margin-bottom:5px"})
-        user_detail = soup.find_all('strong')
-        print(user_info_block, user_detail)
-        return f"BienIci {title_tag}"
+        bienici_dict = {'provider': 'bienici'}
+        strong_tags = soup.find_all('strong')[:3]
+        for key, strong_tag in enumerate(strong_tags):
+            if strong_tag.find('a'):
+                bienici_dict.update({'link_annonce': strong_tag.find('a').get("href")})
+            if strong_tag.text.isnumeric():
+                bienici_dict.update({ 'phone': strong_tag.text })
+            if re.match(regex_email,strong_tag.text):            
+                bienici_dict.update({ 'email': strong_tag.text })
+            bienici_dict.update({ 'user': strong_tag.text })
+        return json.dumps(bienici_dict)
     return f"Seloger {file_str}"
