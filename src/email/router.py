@@ -28,11 +28,12 @@ async def parse_email(
         bienici_dict = {'provider': 'bienici'}
         strong_tags = soup.find_all('strong')[:3]
         for key, strong_tag in enumerate(strong_tags):
+            print(re.match(regex_email, strong_tag.text), strong_tag.text)
             if strong_tag.find('a'):
                 bienici_dict.update({'link_annonce': strong_tag.find('a').get("href")})
-            if strong_tag.text.isnumeric():
+            if strong_tag.text.replace(" ", "").isnumeric():
                 bienici_dict.update({ 'phone': strong_tag.text })
-            if re.match(regex_email,strong_tag.text):            
+            if re.match(regex_email, strong_tag.text):
                 bienici_dict.update({ 'email': strong_tag.text })
             bienici_dict.update({ 'user': strong_tag.text })
         print(bienici_dict)
