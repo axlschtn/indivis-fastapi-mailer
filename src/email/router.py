@@ -35,5 +35,6 @@ async def parse_email(
             if re.match(regex_email,strong_tag.text):            
                 bienici_dict.update({ 'email': strong_tag.text })
             bienici_dict.update({ 'user': strong_tag.text })
+        print(bienici_dict)
         return json.dumps(bienici_dict)
     return f"Seloger {file_str}"
