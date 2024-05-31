@@ -11,5 +11,5 @@ async def parse_email(
     file: Annotated[bytes, File()],
     req: Request
 ):
-    print(file)
+    print(file.decode("utf-8"))
     return 'ok'
