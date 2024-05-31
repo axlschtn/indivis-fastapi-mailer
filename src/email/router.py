@@ -22,4 +22,4 @@ async def parse_email(
     bienici_matcher = re.findall(bienici_pattern_title, title_tag)
     if bienici_matcher:
         return f"BienIci {title_tag}"
-    return f"Seloger"
+    return f"Seloger {title_tag}"
