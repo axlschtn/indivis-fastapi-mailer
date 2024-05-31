@@ -31,10 +31,11 @@ async def parse_email(
             for strong_tag in strong_tags:
                 if strong_tag.find('a'):
                     bienici_dict.update({"link_annonce": strong_tag.find('a').get("href")})
-                if re.match(regex_phone, strong_tag.text):
+                elif re.match(regex_phone, strong_tag.text):
                     bienici_dict.update({"phone": strong_tag.text})
-                if re.match(regex_email, strong_tag.text):
+                elif re.match(regex_email, strong_tag.text):
                     bienici_dict.update({"email": strong_tag.text})
-                bienici_dict.update({"user": strong_tag.text})
+                else:
+                    bienici_dict.update({"user": strong_tag.text})
             return bienici_dict
         return f"Seloger {file_str}"
