@@ -1,6 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Request, File
 import base64
+from bs4 import BeautifulSoup
 
 email_router = APIRouter(
     prefix='/email',
@@ -14,5 +15,6 @@ async def parse_email(
 ):
     file_decode = file.decode("utf-8").encode('utf-8')
     file_str = base64.b64decode(file_decode).decode("utf-8")
-    print(file_str)
-    return 'ok'
+    soup = BeautifulSoup(file_str, 'html.parser') 
+    title_tag:str =  soup.find('title').text
+    return title_tag
