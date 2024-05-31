@@ -26,7 +26,7 @@ async def parse_email(
     bienici_matcher = re.findall(bienici_pattern_title, title_tag)
     if bienici_matcher:
         bienici_dict = {'provider': 'bienici'}
-        strong_tags = soup.find_all('strong')[:3]
+        strong_tags = soup.find_all('strong')[:5]
         for key, strong_tag in enumerate(strong_tags):
             print(re.match(regex_email, strong_tag.text), strong_tag.text)
             if strong_tag.find('a'):
