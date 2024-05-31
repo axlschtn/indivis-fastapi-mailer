@@ -1,18 +1,15 @@
-from fastapi import APIRouter, Request
-from pydantic import BaseModel
+from typing import Annotated
+from fastapi import APIRouter, Request, File
 
 email_router = APIRouter(
     prefix='/email',
     tags=['Email']
 )
 
-class EmailContent(BaseModel):
-    html: str
-
 @email_router.post('/parse')
 async def parse_email(
-    email: EmailContent,
+    file: Annotated[bytes, File()],
     req: Request
 ):
-    print(email)
+    print(file)
     return 'ok'
