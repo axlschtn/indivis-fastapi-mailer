@@ -37,5 +37,5 @@ async def parse_email(
                     bienici_dict.update({"email": strong_tag.text })
                 bienici_dict.update({"user": strong_tag.text })
             print(bienici_dict)
-            return str({"provider":"test","user":"sdfads","email":"gotik@gmail.com","phone":"sadfsdafdsa","link_annonce":"dsfsadfsd"})
+            return {"provider":"test","user":"sdfads","email":"gotik@gmail.com","phone":"sadfsdafdsa","link_annonce":"dsfsadfsd"}
         return f"Seloger {file_str}"
