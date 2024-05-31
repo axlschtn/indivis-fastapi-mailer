@@ -25,17 +25,17 @@ async def parse_email(
     bienici_pattern_title = r'II3-\d{4}'
     bienici_matcher = re.findall(bienici_pattern_title, title_tag)
     if bienici_matcher:
-        bienici_dict = {'provider': 'bienici', 'user': '', 'email': '', 'phone':'', 'link_annonce':''}
+        bienici_dict = {"provider": "bienici", "user": "", "email": "", "phone":"", "link_annonce":""}
         strong_tags = soup.find_all('strong')[1:5]
         for strong_tag in strong_tags:
             print(strong_tag.text.replace(" ", "").isnumeric(), strong_tag.text)
-            # if strong_tag.find('a'):
-            #     bienici_dict.update({'link_annonce': strong_tag.find('a').get("href").split('/')})
+            if strong_tag.find('a'):
+                bienici_dict.update({"link_annonce": strong_tag.find('a').get("href")})
             if strong_tag.text.replace(" ", "").isnumeric():
-                bienici_dict.update({ 'phone': strong_tag.text })
+                bienici_dict.update({"phone": strong_tag.text })
             if re.match(regex_email, strong_tag.text):
-                bienici_dict.update({ 'email': strong_tag.text })
-            bienici_dict.update({ 'user': strong_tag.text })
+                bienici_dict.update({"email": strong_tag.text })
+            bienici_dict.update({"user": strong_tag.text })
         print(bienici_dict)
         return json.dumps(bienici_dict)
     return f"Seloger {file_str}"
