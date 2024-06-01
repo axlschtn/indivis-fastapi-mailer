@@ -4,7 +4,7 @@ from src.email.schema import ResponseParser
 
 def parser(soup: HTMLFormatter):
     response = ResponseParser()
-    strong_tags = soup.find_all('strong')[1:5]
+    strong_tags = soup.find_all('strong')
     for strong_tag in strong_tags:
         if strong_tag.find('a'):
             response.link_annonce = strong_tag.find('a').get("href")
