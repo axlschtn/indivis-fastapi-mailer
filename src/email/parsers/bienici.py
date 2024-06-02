@@ -11,8 +11,9 @@ def parser(soup: HTMLFormatter):
                 response.email = strong_tag.find('a').text    
             else:
                 response.link_annonce = strong_tag.find('a').get("href")
-        if regex_result('phone', strong_tag.text):
+        elif regex_result('phone', strong_tag.text):
             response.phone = strong_tag.text
-        response.user = strong_tag.text
+        else:
+            response.user = strong_tag.text
     response.provider = 'bienici'
     return response
