@@ -5,7 +5,9 @@ from src.email.schema import ResponseParser
 def parser(soup: HTMLFormatter):
     response = ResponseParser()
     strong_tags = soup.find_all('strong')[1:5]
+    print(strong_tags)
     for strong_tag in strong_tags:
+        print(strong_tag)
         if strong_tag.find('a'):
             if strong_tag.find('a').get('href').startswith('mailto:'):
                 response.email = strong_tag.find('a').text    
@@ -16,4 +18,5 @@ def parser(soup: HTMLFormatter):
         else:
             response.user = strong_tag.text
     response.provider = 'bienici'
+    print(response)
     return response
