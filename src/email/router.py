@@ -1,33 +1,45 @@
 from typing import Annotated
-from fastapi import APIRouter, File
+from fastapi import APIRouter, File, Depends
 import base64
 from bs4 import BeautifulSoup
-from .parsers.bienici import parser as bien_ici_parser
+from src.core.regex import extract_domain_email
+from src.core.schema import ResponseParser
+from src.core.parsers.bienici import ImplBieniciParser
+from src.core.parsers.vousamoi import ImplVousAmoiParser
+from src.mock.bienici import soup_mock
+from src.mock.vousamoi import text_1, text_2, text_3
 
 email_router = APIRouter(
     prefix='/email',
     tags=['Email']
 )
 
-
-def provider_match(provider: str):
-    provider = provider.split('@')[1].split('.')[0]
-    if provider == 'bienici':
-        return ( False, True, False )
-    return ( True, False, False )    
-
-@email_router.post('/parse')
+@email_router.post(
+    '/parse',
+    response_model=ResponseParser
+)
 async def parse_email(
-    provider: str,
+    email: str = Depends(extract_domain_email),
     file: Annotated[bytes, File()] = None,
-):
+):  
     if file:
         file_decode = file.decode("utf-8").encode('utf-8')
         file_str = base64.b64decode(file_decode).decode("utf-8")
-        soup = BeautifulSoup(file_str, "html.parser") 
-        vousamoi, bienici, seloger = provider_match(provider)
-        if vousamoi:
-            return bien_ici_parser(soup)
-        elif bienici:
-            return bien_ici_parser(soup)
-        return bien_ici_parser(soup)
+        soup = BeautifulSoup(file_str, "html.parser")
+        if email == 'bienici':
+            return ImplBieniciParser(soup=soup).execute()
+        if email == 'vousamoi':
+            return ImplVousAmoiParser(soup=soup).execute()
+    else:
+        if email == 'bienici':
+            print(ImplBieniciParser(soup=soup_mock).execute())
+        if email == 'vousamoi':
+            print(ImplVousAmoiParser(soup=text_3).execute())
+            print(ImplVousAmoiParser(soup=text_2).execute())
+            print(ImplVousAmoiParser(soup=text_1).execute())
+        return  ResponseParser() 
+        # if vousamoi:
+        #     return ImplBieniciParser(soup)
+        # elif bienici:
+        #     return bien_ici_parser(soup)
+        # return bien_ici_parser(soup)
