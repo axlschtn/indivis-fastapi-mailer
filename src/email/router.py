@@ -25,14 +25,13 @@ async def parse_email(
     if file:
         file_decode = file.decode("utf-8").encode('utf-8')
         file_str = base64.b64decode(file_decode).decode("utf-8")
-        soup = BeautifulSoup(file_str, "html.parser")
         try:
             if email == 'bienici':
-                print(ImplBieniciParser(soup=soup).execute())
-                return ImplBieniciParser(soup=soup).execute()
+                print(ImplBieniciParser(soup=file_str).execute())
+                return ImplBieniciParser(soup=file_str).execute()
             if email == 'vousamoi' or email == 'ambrabbyhub':
-                print(ImplVousAmoiParser(soup=soup).execute())
-                return ImplVousAmoiParser(soup=soup).execute()
+                print(ImplVousAmoiParser(soup=file_str).execute())
+                return ImplVousAmoiParser(soup=file_str).execute()
         except ValueError as error:
             print(str(error))
     else:
