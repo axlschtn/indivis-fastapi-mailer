@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, File, Depends, HttpException
+from fastapi import APIRouter, File, Depends
 import base64
 from bs4 import BeautifulSoup
 from src.core.regex import extract_domain_email
