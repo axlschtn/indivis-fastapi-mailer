@@ -28,12 +28,12 @@ async def parse_email(
         soup = BeautifulSoup(file_str, "html.parser")
         if email == 'bienici':
             return ImplBieniciParser(soup=soup).execute()
-        if email == 'vousamoi':
+        if email == 'vousamoi' or email == 'ambrabbyhub':
             return ImplVousAmoiParser(soup=soup).execute()
     else:
         if email == 'bienici':
             print(ImplBieniciParser(soup=soup_mock).execute())
-        if email == 'vousamoi':
+        if email == 'vousamoi' or email == 'ambrabbyhub':
             print(ImplVousAmoiParser(soup=text_3).execute())
             print(ImplVousAmoiParser(soup=text_2).execute())
             print(ImplVousAmoiParser(soup=text_1).execute())

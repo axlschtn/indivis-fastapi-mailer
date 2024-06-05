@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from bs4.formatter import HTMLFormatter
-from src.core.schema import ResponseParser, VousAMoiParser
+from src.core.schema import ResponseParser, ResponseScrapped
 from src.core.regex import findall_regex
 
 class ImplVousAmoiParser():
@@ -29,7 +29,7 @@ class ImplVousAmoiParser():
                 user = f"{name[0].split(':')[-1]} {prenom[0].split(':')[-1]}"
         return ResponseParser(
             provider='vousamoi',
-            data=VousAMoiParser(
+            data=ResponseScrapped(
                 user=user,
                 phone=phone[0],
                 email=email[0]

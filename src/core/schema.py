@@ -1,7 +1,7 @@
 from typing import Annotated, Union
 from pydantic import BaseModel, Field
 
-class BienIciParser(BaseModel):
+class ResponseScrapped(BaseModel):
     email: str = Field(None)
     phone: str = Field(None)
     user: str = Field(None)
@@ -16,7 +16,4 @@ class VousAMoiParser(BaseModel):
     
 class ResponseParser(BaseModel):
     provider: str = Field(None)
-    data: Union[
-        Annotated[VousAMoiParser, None],
-        Annotated[BienIciParser, None]
-    ] = Field(None)
+    data: ResponseScrapped = Field(None)

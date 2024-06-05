@@ -1,6 +1,6 @@
 from bs4.formatter import HTMLFormatter
 from bs4 import BeautifulSoup
-from src.core.schema import ResponseParser, BienIciParser
+from src.core.schema import ResponseParser, ResponseScrapped
 
 class ImplBieniciParser():
     
@@ -11,7 +11,7 @@ class ImplBieniciParser():
         strong_tags = self.soup.find_all('strong')[1:5]
         return ResponseParser(
             provider='bienici',
-            data=BienIciParser(
+            data=ResponseScrapped(
                 phone=strong_tags[2].text,
                 email=strong_tags[3].text,
                 user=strong_tags[1].text,
